@@ -28,8 +28,8 @@ contract ReentryProtected
     //   Protected functions cannot use the `return` keyword
     //   Protected functions return values must be through return parameters.
     modifier preventReentry() {
-        require(!repMutex);
-        reMutex = true;
+        require(!__reMutex);
+        __reMutex = true;
         _;
         delete __reMutex;
         return;
