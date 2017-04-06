@@ -1,7 +1,7 @@
 /*
 file:   ReentryProtection.sol
-ver:    0.2.0
-updated:16-Sep-2016
+ver:    0.3.0
+updated:6-April-2016
 author: Darryl Morris
 email:  o0ragman0o AT gmail.com
 
@@ -14,12 +14,12 @@ GNU lesser General Public License for more details.
 <http://www.gnu.org/licenses/>.
 */
 
-pragma solidity ^0.4.0;
+pragma solidity ^0.4.10;
 
-contract ReentryProtection
+contract ReentryProtected
 {
     // The reentry protection state mutex.
-    bool repMutex;
+    bool __reMutex;
 
     // This modifier can be used on functions with external calls to
     // prevent reentry attacks.
@@ -28,10 +28,10 @@ contract ReentryProtection
     //   Protected functions cannot use the `return` keyword
     //   Protected functions return values must be through return parameters.
     modifier preventReentry() {
-        if (repMutex) throw;
-        else repMutex = true;
+        require(!repMutex);
+        reMutex = true;
         _;
-        delete repMutex;
+        delete __reMutex;
         return;
     }
 
@@ -40,7 +40,7 @@ contract ReentryProtection
     // set the mutex. This prevents the contract from being reenter under a
     // different memory context which can break state variable integrity.
     modifier noReentry() {
-        if (repMutex) throw;
+        require(!__reMutex);
         _;
     }
 }
