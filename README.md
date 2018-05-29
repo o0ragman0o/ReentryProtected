@@ -10,7 +10,7 @@ Two such modifiers are provided,`preventReentry()` which tests, sets and release
 ## preventReentry()
 ```
     modifier preventReentry() {
-        require(!repMutex);
+        require(!reMutex);
         else __reMutex = true;
         _;
         delete __reMutex;
